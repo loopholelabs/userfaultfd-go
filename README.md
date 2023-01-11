@@ -4,10 +4,6 @@ Go bindings to userfaultfd.
 
 🚧 This project is a work-in-progress! Instructions will be added as soon as it is usable. 🚧
 
-# Docs
-
-For the demo, see [demo.md](./docs/demo.md).
-
 ## License
 
 The userfaultfd-go project is proprietary software.
