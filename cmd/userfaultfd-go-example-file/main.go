@@ -2,15 +2,15 @@ package main
 
 import (
 	"flag"
-	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/loopholelabs/userfaultfd-go/pkg/mapper"
 )
 
 func main() {
-	length := flag.Int("length", os.Getpagesize()*2, "Amount of bytes to allocate")
 	file := flag.String("file", "LICENSE", "File to map")
+	dst := flag.String("dst", filepath.Join(os.TempDir(), "LICENSE"), "Destination to write to")
 
 	flag.Parse()
 
@@ -19,7 +19,12 @@ func main() {
 		panic(err)
 	}
 
-	b, uffd, start, err := mapper.Register(*length)
+	s, err := f.Stat()
+	if err != nil {
+		panic(err)
+	}
+
+	b, uffd, start, err := mapper.Register(int(s.Size()))
 	if err != nil {
 		panic(err)
 	}
@@ -30,7 +35,7 @@ func main() {
 		}
 	}()
 
-	for i, c := range b {
-		log.Printf("%v %c", i, rune(c))
+	if err := os.WriteFile(*dst, b, os.ModePerm); err != nil {
+		panic(err)
 	}
 }

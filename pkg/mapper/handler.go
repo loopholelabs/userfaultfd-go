@@ -46,8 +46,11 @@ func Handle(uffd UFFD, start uintptr, src io.ReaderAt) error {
 		addr := constants.GetPagefaultAddress(&pagefault)
 
 		p := make([]byte, pagesize)
-		if _, err := src.ReadAt(p, int64(uintptr(addr)-start)); err != nil {
-			return err
+		if n, err := src.ReadAt(p, int64(uintptr(addr)-start)); err != nil {
+			// We always read full pages; the last read can thus `EOF` if the file isn't an exact multiple of `pagesize`
+			if !(errors.Is(err, io.EOF) && n != 0) {
+				return err
+			}
 		}
 
 		cpy := constants.NewUffdioCopy(
