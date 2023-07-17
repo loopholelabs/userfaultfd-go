@@ -3,7 +3,6 @@ package transfer
 import (
 	"encoding/binary"
 	"errors"
-	"log"
 	"net"
 	"syscall"
 
@@ -69,8 +68,6 @@ func ReceiveFds(conn *net.UnixConn, num int) ([]uintptr, error) {
 }
 
 func SendUFFD(conn *net.UnixConn, uffd mapper.UFFD, start uintptr) error {
-	log.Println(start, uffd)
-
 	if err := binary.Write(conn, binary.BigEndian, int64(start)); err != nil {
 		return err
 	}

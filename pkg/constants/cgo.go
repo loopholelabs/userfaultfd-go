@@ -17,9 +17,6 @@ import "unsafe"
 const (
 	NR_userfaultfd = C.__NR_userfaultfd
 
-	O_CLOEXEC  = C.O_CLOEXEC
-	O_NONBLOCK = C.O_NONBLOCK
-
 	UFFD_API             = C.UFFD_API
 	UFFD_EVENT_PAGEFAULT = C.UFFD_EVENT_PAGEFAULT
 

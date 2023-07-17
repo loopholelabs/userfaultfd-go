@@ -15,7 +15,7 @@ type UFFD uintptr
 func Register(length int) ([]byte, UFFD, uintptr, error) {
 	pagesize := os.Getpagesize()
 
-	uffd, _, errno := syscall.Syscall(constants.NR_userfaultfd, constants.O_CLOEXEC|constants.O_NONBLOCK, 0, 0)
+	uffd, _, errno := syscall.Syscall(constants.NR_userfaultfd, 0, 0, 0)
 	if int(uffd) == -1 {
 		return []byte{}, 0, 0, fmt.Errorf("%v", errno)
 	}
