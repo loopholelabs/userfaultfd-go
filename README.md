@@ -2,6 +2,8 @@
 
 Go bindings to userfaultfd.
 
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Discord](https://dcbadge.vercel.app/api/server/JYmFhtdPeu?style=flat)](https://loopholelabs.io/discord)
 ![Go Version](https://img.shields.io/badge/go%20version-%3E=1.19-61CFDD.svg)
 [![Go Reference](https://pkg.go.dev/badge/github.com/loopholelabs/userfaultfd-go.svg)](https://pkg.go.dev/github.com/loopholelabs/userfaultfd-go)
 
