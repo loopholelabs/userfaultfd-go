@@ -3,7 +3,7 @@ module github.com/loopholelabs/userfaultfd-go
 go 1.19
 
 require (
-	github.com/minio/minio-go/v7 v7.0.74
+	github.com/minio/minio-go/v7 v7.0.75
 	golang.org/x/sys v0.22.0
 )
 
