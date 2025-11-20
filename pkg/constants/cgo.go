@@ -25,6 +25,7 @@ const (
 	UFFDIO_API      = 3222841919 // From <linux/userfaultfd.h> macro
 	UFFDIO_REGISTER = 3223366144 // From <linux/userfaultfd.h> macro
 	UFFDIO_COPY     = 3223890435 // From <linux/userfaultfd.h> macro
+	UFFDIO_MOVE     = 3223890437 // From <linux/userfaultfd.h> macro
 )
 
 type (
@@ -39,6 +40,7 @@ type (
 	UffdioRegister = C.struct_uffdio_register
 	UffdioRange    = C.struct_uffdio_range
 	UffdioCopy     = C.struct_uffdio_copy
+	UffdioMove     = C.struct_uffdio_move
 )
 
 func NewUffdioAPI(api, features CULong) UffdioAPI {
@@ -65,6 +67,16 @@ func NewUffdioCopy(b []byte, address CULong, pagesize CULong, mode CULong, copy 
 		len:  pagesize,
 		mode: mode,
 		copy: copy,
+	}
+}
+
+func NewUffdioMove(b []byte, address CULong, pagesize CULong, mode CULong, move CLong) UffdioMove {
+	return UffdioMove{
+		src:  CULong(uintptr(unsafe.Pointer(&b[0]))),
+		dst:  address &^ CULong(pagesize-1),
+		len:  pagesize,
+		mode: mode,
+		move: move,
 	}
 }
 
