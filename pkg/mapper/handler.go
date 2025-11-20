@@ -64,7 +64,7 @@ func Handle(uffd UFFD, start uintptr, src io.ReaderAt) error {
 			}
 		}
 
-		cpy := constants.NewUffdioCopy(
+		cpy := constants.NewUffdioMove(
 			p,
 			addr&^constants.CULong(pagesize-1),
 			constants.CULong(pagesize),
@@ -75,7 +75,7 @@ func Handle(uffd UFFD, start uintptr, src io.ReaderAt) error {
 		if _, _, errno := syscall.Syscall(
 			syscall.SYS_IOCTL,
 			uintptr(uffd),
-			constants.UFFDIO_COPY,
+			constants.UFFDIO_MOVE,
 			uintptr(unsafe.Pointer(&cpy)),
 		); errno != 0 {
 			return fmt.Errorf("%v", errno)
