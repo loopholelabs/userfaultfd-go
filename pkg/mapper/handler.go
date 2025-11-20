@@ -19,6 +19,19 @@ var (
 func Handle(uffd UFFD, start uintptr, src io.ReaderAt) error {
 	pagesize := os.Getpagesize()
 
+	p, err := syscall.Mmap(
+		-1,
+		0,
+		pagesize,
+		syscall.PROT_READ|syscall.PROT_WRITE,
+		syscall.MAP_PRIVATE|syscall.MAP_ANONYMOUS,
+	)
+	if err != nil {
+		return err
+	}
+
+	buf := make([]byte, unsafe.Sizeof(constants.UffdMsg{}))
+
 	for {
 		if _, err := unix.Poll(
 			[]unix.PollFd{{
@@ -30,7 +43,6 @@ func Handle(uffd UFFD, start uintptr, src io.ReaderAt) error {
 			return err
 		}
 
-		buf := make([]byte, unsafe.Sizeof(constants.UffdMsg{}))
 		if _, err := syscall.Read(int(uffd), buf); err != nil {
 			return err
 		}
@@ -45,7 +57,6 @@ func Handle(uffd UFFD, start uintptr, src io.ReaderAt) error {
 
 		addr := constants.GetPagefaultAddress(&pagefault)
 
-		p := make([]byte, pagesize)
 		if n, err := src.ReadAt(p, int64(uintptr(addr)-start)); err != nil {
 			// We always read full pages; the last read can thus `EOF` if the file isn't an exact multiple of `pagesize`
 			if !(errors.Is(err, io.EOF) && n != 0) {
